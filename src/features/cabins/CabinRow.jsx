@@ -1,4 +1,10 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteCabin } from "../../services/apiCabins";
+import Spinner from "../../ui/Spinner";
+import { formatCurrency } from "../../utils/helpers";
 import styled from "styled-components";
+import Button from "../../ui/Button";
+import { toast } from "react-toastify";
 
 const TableRow = styled.div`
   display: grid;
@@ -38,3 +44,43 @@ const Discount = styled.div`
   font-weight: 500;
   color: var(--color-green-700);
 `;
+
+const CabinRow = ({ cabin }) => {
+  const {
+    id: cabinId,
+    name,
+    image,
+    maxCapacity,
+    regularPrice,
+    discount,
+  } = cabin;
+
+  const queryClient = useQueryClient();
+
+  const { isPending, mutate } = useMutation({
+    mutationFn: () => deleteCabin(cabinId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cabins"] });
+      toast.success("Cabin deleted successfully.");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  if (isPending) return <Spinner />;
+  return (
+    <TableRow role="row">
+      <Img src={image} alt={name} />
+      <Cabin>{name}</Cabin>
+      <div>Fits up to {maxCapacity} guests</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      <Discount>{formatCurrency(discount)}</Discount>
+      <Button onClick={() => mutate(cabinId)} disabled={isPending}>
+        Delete
+      </Button>
+    </TableRow>
+  );
+};
+
+export default CabinRow;
