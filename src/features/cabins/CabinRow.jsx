@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCabin } from "../../services/apiCabins";
 import Spinner from "../../ui/Spinner";

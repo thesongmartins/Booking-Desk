@@ -8,6 +8,30 @@ export const getCabins = async () => {
   }
   return data;
 };
+export const createCabin = async (newCabin) => {
+  const { data, error } = await supabase
+    .from("cabins")
+    .insert([newCabin])
+    .select();
+
+  if (error) {
+    throw new Error("Cabin could not be created. Please try again later");
+  }
+  return data;
+};
+
+export const updateCabin = async () => {
+  const { data, error } = await supabase
+    .from("cabins")
+    .update({ other_column: "otherValue" })
+    .eq("some_column", "someValue")
+    .select();
+
+  if (error) {
+    throw new Error("Cabin could not be updated. Please try again later.");
+  }
+  return data;
+};
 
 export const deleteCabin = async (cabinId) => {
   const { data, error } = await supabase
