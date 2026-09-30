@@ -42,10 +42,10 @@ const Label = styled.label`
   font-weight: 500;
 `;
 
-const Error = styled.span`
-  font-size: 1.4rem;
-  color: var(--color-red-700);
-`;
+// const Error = styled.span`
+//   font-size: 1.4rem;
+//   color: var(--color-red-700);
+// `;
 
 function CreateCabinForm() {
   const {
@@ -133,7 +133,11 @@ function CreateCabinForm() {
 
       <FormRow>
         <Label htmlFor="image">Cabin photo</Label>
-        <FileInput id="image" accept="image/*" />
+        <FileInput
+          id="image"
+          accept="image/*"
+          {...register("image", { required: "Cabin photo is required" })}
+        />
       </FormRow>
 
       <FormRow>
